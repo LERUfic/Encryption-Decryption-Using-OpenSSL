@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+	<head>
+		<title>OpenSSL</title>
+		<script src="jquery.js"></script>
+		<script src="jsencrypt.js"></script>
+	</head>
+	<body>
+		USERNAME : <input type="text" id="username"><br>
+		PASSWORD : <input type="password" id="password"><br>
+		<input type="hidden" id="pubkey" value="-----BEGIN PUBLIC KEY-----
+MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDd8YBfKogFC9TGCP5roKHyJQmg
+vlq0QFsRvwkpHtZSCHz3U8kAd3zJ8NfEChNpEYcCTLUMV7vhMQBe+dlgz0fCautk
+zhuw63IartLeTekoO9xprKusy0tnsBbJcBcbAF6SQ1j02t8pvggYpJLZLmzUsfDL
+Uohdr+mxp5FvQeg/EwIDAQAB
+-----END PUBLIC KEY-----">
+		<button type=button onclick="encryptLogin()">COBA</button>
+		<script type="text/javascript">
+			function encryptLogin(){
+				//Getting the data needed to encrypt
+				var username = $('#username').val();
+          		var password = $('#password').val();
+          		var line = username + '||' + password;
+
+          		//Encryption process
+				var encrypt = new JSEncrypt();
+          		encrypt.setPublicKey($('#pubkey').val());
+          		var encrypted = encrypt.encrypt(line);
+
+          		//Send encryption data to backend
+          		var form = document.createElement('form');
+	  			document.body.appendChild(form);
+	  			form.method = 'POST';
+	  			form.action = 'login.php';
+	  			var input = document.createElement('input');
+	  			input.type = 'hidden';
+	  			input.name = 'encrypted';
+	  			input.value = encrypted;
+	  			form.appendChild(input);
+
+	  			form.submit();
+			}
+		</script>
+	</body>
+</html>
